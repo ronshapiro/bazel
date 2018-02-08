@@ -149,6 +149,9 @@ java_import(
     deps = [
 {deps_string}
     ],
+    tags = [
+{tags}
+    ],
     visibility = ['//visibility:public']
 )
 
@@ -167,6 +170,9 @@ aar_import(
     deps = [
 {deps_string}
     ],
+    tags = [
+{tags}
+    ],
     visibility = ['//visibility:public'],
 )
 
@@ -179,10 +185,12 @@ filegroup(
 # Provides the syntax "@jar_name//jar" for dependencies
 def _generate_build_file(ctx, template, paths):
   deps_string = "\n".join(["'%s'," % dep for dep in ctx.attr.deps])
+  tags = '"maven_coordinates=%s",' % ctx.attr.artifact
   contents = template.format(
       rule_name = ctx.name,
       artifact_filename = paths.artifact_filename,
-      deps_string = deps_string)
+      deps_string = deps_string,
+      tags = tags)
   ctx.file('%s/BUILD' % paths.symlink_dir, contents, False)
 
 
